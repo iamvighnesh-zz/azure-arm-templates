@@ -39,6 +39,27 @@
     },
     "azure.active.directory.tenant.id": {
       "value": "<INSERT_YOUR_AZURE_ACTIVE_DIRECTORY_TENANT_ID_HERE>"
+    },
+    "sql.database.name": {
+      "value": "<INSERT_YOUR_DATABASE_NAME_HERE>"
+    },
+    "sql.database.sku.name": {
+      "value": "<INSERT_YOUR_DATABASE_SKU_NAME_HERE>"
+    },
+    "sql.database.sku.tier": {
+      "value": "<INSERT_YOUR_DATABASE_SKU_TIER_HERE>"
+    },
+    "sql.database.sku.capacity": {
+      "value": "<INSERT_YOUR_DATABASE_SKU_CAPACITY_HERE>"
+    },
+    "sql.database.edition": {
+      "value": "<INSERT_YOUR_DATABASE_EDITION_HERE>"
+    },
+    "sql.database.collation": {
+      "value": "<INSERT_YOUR_DATABASE_COLLATION_HERE>"
+    },
+    "sql.database.maximum.size.in.bytes": {
+      "value": "<INSERT_YOUR_DATABASE_MAX_SIZE_IN_BYTES_HERE>"
     }
   }
 }
