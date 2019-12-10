@@ -1,0 +1,24 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "sql.server.primary.name": {
+      "value": "<INSERT_YOUR_PRIMARY_SQL_SERVER_NAME_HERE>"
+    },
+    "sql.server.primary.location": {
+      "value": "<INSERT_YOUR_PRIMARY_SQL_SERVER_LOCATION_HERE>"
+    },
+    "sql.server.secondary.name": {
+      "value": "<INSERT_YOUR_SECONDARY_SQL_SERVER_NAME_HERE>"
+    },
+    "sql.server.secondary.location": {
+      "value": "<INSERT_YOUR_SECONDARY_SQL_SERVER_LOCATION_HERE>"
+    },
+    "sql.server.administrator.user.name": {
+      "value": "<INSERT_YOUR_SQL_SERVER_ADMINISTRATOR_USER_NAME_HERE>"
+    },
+    "sql.server.administrator.password": {
+      "value": "<INSERT_YOUR_SQL_SERVER_ADMINISTRATOR_PASSWORD_HERE>"
+    }
+  }
+}

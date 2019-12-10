@@ -1,0 +1,50 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "sql.server.primary.name": {
+      "type": "string"
+    },
+    "sql.server.primary.location": {
+      "type": "string"
+    },
+    "sql.server.secondary.name": {
+      "type": "string"
+    },
+    "sql.server.secondary.location": {
+      "type": "string"
+    },
+    "sql.server.administrator.user.name": {
+      "type": "string"
+    },
+    "sql.server.administrator.password": {
+      "type": "securestring"
+    }
+  },
+  "variables": {},
+  "resources": [
+    {
+      "type": "Microsoft.Sql/servers",
+      "name": "[parameters('sql.server.primary.name')]",
+      "location": "[parameters('sql.server.primary.location')]",
+      "apiVersion": "2015–05–01-preview",
+      "properties": {
+        "administratorLogin": "[parameters('sql.server.administrator.user.name')]",
+        "administratorLoginPassword": "[parameters('sql.server.administrator.password')]"
+      },
+      "resources": []
+    },
+    {
+      "type": "Microsoft.Sql/servers",
+      "name": "[parameters('sql.server.secondary.name')]",
+      "location": "[parameters('sql.server.secondary.location')]",
+      "apiVersion": "2015–05–01-preview",
+      "properties": {
+        "administratorLogin": "[parameters('sql.server.administrator.user.name')]",
+        "administratorLoginPassword": "[parameters('sql.server.administrator.password')]"
+      },
+      "resources": []
+    }
+  ],
+  "outputs": {}
+}
