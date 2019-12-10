@@ -19,6 +19,17 @@
     },
     "sql.server.administrator.password": {
       "value": "<INSERT_YOUR_SQL_SERVER_ADMINISTRATOR_PASSWORD_HERE>"
+    },
+    "sql.server.whitelisted.ip.addresses": {
+      "value": {
+        "values": [
+          {
+            "name": "AllowAllAzureIps",
+            "start": "0.0.0.0",
+            "end": "0.0.0.0"
+          }
+        ]
+      }
     }
   }
 }

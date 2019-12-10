@@ -19,6 +19,9 @@
     },
     "sql.server.administrator.password": {
       "type": "securestring"
+    },
+    "sql.server.whitelisted.ip.addresses": {
+      "type": "object"
     }
   },
   "variables": {},
@@ -44,7 +47,40 @@
         "administratorLoginPassword": "[parameters('sql.server.administrator.password')]"
       },
       "resources": []
+    },
+    {
+      "type": "Microsoft.Sql/servers/firewallRules",
+      "name": "[concat(parameters('sql.server.primary.name'), '/', parameters('sql.server.whitelisted.ip.addresses').values[copyIndex()].name)]",
+      "location": "[parameters('sql.server.primary.location')]",
+      "apiVersion": "2015–05–01-preview",
+      "copy": {
+        "name": "copyLoop",
+        "count": "[length(parameters('sql.server.whitelisted.ip.addresses').values)]"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Sql/servers', parameters('sql.server.primary.name'))]"
+      ],
+      "properties": {
+        "startIpAddress": "[parameters('sql.server.whitelisted.ip.addresses').values[copyIndex()].start]",
+        "endIpAddress": "[parameters('sql.server.whitelisted.ip.addresses').values[copyIndex()].end]"
+      }
+    },
+    {
+      "type": "Microsoft.Sql/servers/firewallRules",
+      "name": "[concat(parameters('sql.server.secondary.name'), '/', parameters('sql.server.whitelisted.ip.addresses').values[copyIndex()].name)]",
+      "location": "[parameters('sql.server.secondary.location')]",
+      "apiVersion": "2015–05–01-preview",
+      "copy": {
+        "name": "copyLoop",
+        "count": "[length(parameters('sql.server.whitelisted.ip.addresses').values)]"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Sql/servers', parameters('sql.server.secondary.name'))]"
+      ],
+      "properties": {
+        "startIpAddress": "[parameters('sql.server.whitelisted.ip.addresses').values[copyIndex()].start]",
+        "endIpAddress": "[parameters('sql.server.whitelisted.ip.addresses').values[copyIndex()].end]"
+      }
     }
-  ],
-  "outputs": {}
+  ]
 }
