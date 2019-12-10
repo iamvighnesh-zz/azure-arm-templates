@@ -1,0 +1,6 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/Azure.SqlServer.SingleDatabase/.vs/Azure.SqlServer.SingleDatabase
+/.vs
