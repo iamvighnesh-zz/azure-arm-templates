@@ -30,6 +30,15 @@
           }
         ]
       }
+    },
+    "azure.active.directory.administrator.group": {
+      "value": "<INSERT_YOUR_AZURE_ACTIVE_DIRECTORY_ADMINISTRATOR_GROUP_NAME_HERE>"
+    },
+    "azure.active.directory.object.id": {
+      "value": "<INSERT_YOUR_AZURE_ACTIVE_DIRECTORY_OBJECT_ID_HERE>"
+    },
+    "azure.active.directory.tenant.id": {
+      "value": "<INSERT_YOUR_AZURE_ACTIVE_DIRECTORY_TENANT_ID_HERE>"
     }
   }
 }

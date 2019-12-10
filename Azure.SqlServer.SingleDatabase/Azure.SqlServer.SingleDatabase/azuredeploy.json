@@ -22,6 +22,15 @@
     },
     "sql.server.whitelisted.ip.addresses": {
       "type": "object"
+    },
+    "azure.active.directory.administrator.group": {
+      "type": "string"
+    },
+    "azure.active.directory.object.id": {
+      "type": "string"
+    },
+    "azure.active.directory.tenant.id": {
+      "type": "string"
     }
   },
   "variables": {},
@@ -35,7 +44,23 @@
         "administratorLogin": "[parameters('sql.server.administrator.user.name')]",
         "administratorLoginPassword": "[parameters('sql.server.administrator.password')]"
       },
-      "resources": []
+      "resources": [
+        {
+          "type": "administrators",
+          "name": "activeDirectory",
+          "location": "[parameters('sql.server.primary.location')]",
+          "apiVersion": "2014-04-01-preview",
+          "properties": {
+            "administratorType": "ActiveDirectory",
+            "login": "[parameters('azure.active.directory.administrator.group')]",
+            "sid": "[parameters('azure.active.directory.object.id')]",
+            "tenantId": "[parameters('azure.active.directory.tenant.id')]"
+          },
+          "dependsOn": [
+            "[resourceId('Microsoft.Sql/servers', parameters('sql.server.primary.name'))]"
+          ]
+        }
+      ]
     },
     {
       "type": "Microsoft.Sql/servers",
@@ -46,7 +71,23 @@
         "administratorLogin": "[parameters('sql.server.administrator.user.name')]",
         "administratorLoginPassword": "[parameters('sql.server.administrator.password')]"
       },
-      "resources": []
+      "resources": [
+        {
+          "type": "administrators",
+          "name": "activeDirectory",
+          "location": "[parameters('sql.server.secondary.location')]",
+          "apiVersion": "2014-04-01-preview",
+          "properties": {
+            "administratorType": "ActiveDirectory",
+            "login": "[parameters('azure.active.directory.administrator.group')]",
+            "sid": "[parameters('azure.active.directory.object.id')]",
+            "tenantId": "[parameters('azure.active.directory.tenant.id')]"
+          },
+          "dependsOn": [
+            "[resourceId('Microsoft.Sql/servers', parameters('sql.server.secondary.name'))]"
+          ]
+        }
+      ]
     },
     {
       "type": "Microsoft.Sql/servers/firewallRules",
