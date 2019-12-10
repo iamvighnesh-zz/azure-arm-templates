@@ -60,6 +60,18 @@
     },
     "sql.database.maximum.size.in.bytes": {
       "value": "<INSERT_YOUR_DATABASE_MAX_SIZE_IN_BYTES_HERE>"
+    },
+    "sql.server.primary.storage.account.name": {
+      "value": "<INSERT_YOUR_PRIMARY_STORAGE_ACCOUNT_NAME_HERE>"
+    },
+    "sql.server.secondary.storage.account.name": {
+      "value": "<INSERT_YOUR_SECONDARY_STORAGE_ACCOUNT_NAME_HERE>"
+    },
+    "sql.server.security.email.addresses": {
+      "value": "<INSERT_YOUR_SECURITY_EMAIL_ADDRESSES_HERE>"
+    },
+    "sql.server.storage.account.subscription.id": {
+      "value": "<INSERT_YOUR_STORAGE_ACCOUNT_SUBSCRIPTION_ID_HERE>"
     }
   }
 }
