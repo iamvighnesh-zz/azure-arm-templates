@@ -14,6 +14,9 @@
     "sql.server.secondary.location": {
       "value": "<INSERT_YOUR_SECONDARY_SQL_SERVER_LOCATION_HERE>"
     },
+    "sql.server.failover.group.name": {
+      "value": "<INSERT_YOUR_SQL_SERVER_FAILOVER_GROUP_NAME_HERE>"
+    },
     "sql.server.administrator.user.name": {
       "value": "<INSERT_YOUR_SQL_SERVER_ADMINISTRATOR_USER_NAME_HERE>"
     },
@@ -39,6 +42,45 @@
     },
     "azure.active.directory.tenant.id": {
       "value": "<INSERT_YOUR_AZURE_ACTIVE_DIRECTORY_TENANT_ID_HERE>"
+    },
+    "sql.database.name": {
+      "value": "<INSERT_YOUR_DATABASE_NAME_HERE>"
+    },
+    "sql.database.sku.name": {
+      "value": "<INSERT_YOUR_DATABASE_SKU_NAME_HERE>"
+    },
+    "sql.database.sku.tier": {
+      "value": "<INSERT_YOUR_DATABASE_SKU_TIER_HERE>"
+    },
+    "sql.database.sku.capacity": {
+      "value": "<INSERT_YOUR_DATABASE_SKU_CAPACITY_HERE>"
+    },
+    "sql.database.edition": {
+      "value": "<INSERT_YOUR_DATABASE_EDITION_HERE>"
+    },
+    "sql.database.collation": {
+      "value": "<INSERT_YOUR_DATABASE_COLLATION_HERE>"
+    },
+    "sql.database.maximum.size.in.bytes": {
+      "value": "<INSERT_YOUR_DATABASE_MAX_SIZE_IN_BYTES_HERE>"
+    },
+    "sql.database.zone.redundancy.enabled": {
+      "value": "<INSERT_YOUR_DATABASE_ZONE_REDUNDANCY_ENABLED_FLAG_HERE>"
+    },
+    "sql.database.read.scale.out": {
+      "value": "<INSERT_YOUR_DATABASE_READ_SCALE_OUT_FLAG_HERE>"
+    },
+    "sql.server.primary.storage.account.name": {
+      "value": "<INSERT_YOUR_PRIMARY_STORAGE_ACCOUNT_NAME_HERE>"
+    },
+    "sql.server.secondary.storage.account.name": {
+      "value": "<INSERT_YOUR_SECONDARY_STORAGE_ACCOUNT_NAME_HERE>"
+    },
+    "sql.server.security.email.addresses": {
+      "value": "<INSERT_YOUR_SECURITY_EMAIL_ADDRESSES_HERE>"
+    },
+    "sql.server.storage.account.subscription.id": {
+      "value": "<INSERT_YOUR_STORAGE_ACCOUNT_SUBSCRIPTION_ID_HERE>"
     }
   }
 }

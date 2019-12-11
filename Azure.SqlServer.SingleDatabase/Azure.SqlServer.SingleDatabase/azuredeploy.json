@@ -14,6 +14,9 @@
     "sql.server.secondary.location": {
       "type": "string"
     },
+    "sql.server.failover.group.name": {
+      "type": "string"
+    },
     "sql.server.administrator.user.name": {
       "type": "string"
     },
@@ -31,9 +34,71 @@
     },
     "azure.active.directory.tenant.id": {
       "type": "string"
+    },
+    "sql.database.name": {
+      "type": "string"
+    },
+    "sql.database.sku.name": {
+      "type": "string"
+    },
+    "sql.database.sku.tier": {
+      "type": "string"
+    },
+    "sql.database.sku.capacity": {
+      "type": "string"
+    },
+    "sql.database.edition": {
+      "type": "string"
+    },
+    "sql.database.collation": {
+      "type": "string"
+    },
+    "sql.database.maximum.size.in.bytes": {
+      "type": "string"
+    },
+    "sql.database.zone.redundancy.enabled": {
+      "type": "string"
+    },
+    "sql.database.read.scale.out": {
+      "type": "string"
+    },
+    "sql.server.primary.storage.account.name": {
+      "type": "string"
+    },
+    "sql.server.secondary.storage.account.name": {
+      "type": "string"
+    },
+    "sql.server.security.email.addresses": {
+      "type": "string"
+    },
+    "sql.server.storage.account.subscription.id": {
+      "type": "string"
     }
   },
-  "variables": {},
+  "variables": {
+    "sql.server.primary.storage.account.endpoint": "[concat('https://', parameters('sql.server.primary.storage.account.name'), '.blob.core.windows.net')]",
+    "sql.server.secondary.storage.account.endpoint": "[concat('https://', parameters('sql.server.secondary.storage.account.name'), '.blob.core.windows.net')]",
+    "sql.server.storage.account.audit.retention.in.days": 90,
+    "sql.server.storage.account.audit.event.types": [
+      "APPLICATION_ROLE_CHANGE_PASSWORD_GROUP",
+      "BACKUP_RESTORE_GROUP",
+      "DATABASE_OBJECT_CHANGE_GROUP",
+      "DATABASE_OBJECT_OWNERSHIP_CHANGE_GROUP",
+      "DATABASE_OBJECT_PERMISSION_CHANGE_GROUP",
+      "DATABASE_OPERATION_GROUP",
+      "DATABASE_PERMISSION_CHANGE_GROUP",
+      "DATABASE_PRINCIPAL_CHANGE_GROUP",
+      "DATABASE_PRINCIPAL_IMPERSONATION_GROUP",
+      "DATABASE_ROLE_MEMBER_CHANGE_GROUP",
+      "FAILED_DATABASE_AUTHENTICATION_GROUP",
+      "SCHEMA_OBJECT_ACCESS_GROUP",
+      "SCHEMA_OBJECT_CHANGE_GROUP",
+      "SCHEMA_OBJECT_OWNERSHIP_CHANGE_GROUP",
+      "SCHEMA_OBJECT_PERMISSION_CHANGE_GROUP",
+      "SUCCESSFUL_DATABASE_AUTHENTICATION_GROUP",
+      "USER_CHANGE_PASSWORD_GROUP"
+    ]
+  },
   "resources": [
     {
       "type": "Microsoft.Sql/servers",
@@ -45,6 +110,34 @@
         "administratorLoginPassword": "[parameters('sql.server.administrator.password')]"
       },
       "resources": [
+        {
+          "name": "[parameters('sql.server.failover.group.name')]",
+          "type": "failoverGroups",
+          "apiVersion": "2015-05-01-preview",
+          "properties": {
+            "serverName": "[parameters('sql.server.primary.name')]",
+            "partnerServers": [
+              {
+                "id": "[resourceId('Microsoft.Sql/servers/', parameters('sql.server.secondary.name'))]"
+              }
+            ],
+            "readWriteEndpoint": {
+              "failoverPolicy": "Automatic",
+              "failoverWithDataLossGracePeriodMinutes": 60
+            },
+            "readOnlyEndpoint": {
+              "failoverPolicy": "Disabled"
+            },
+            "databases": [
+              "[resourceId('Microsoft.Sql/servers/databases', parameters('sql.server.primary.name'), parameters('sql.database.name'))]"
+            ]
+          },
+          "dependsOn": [
+            "[parameters('sql.server.primary.name')]",
+            "[resourceId('Microsoft.Sql/servers', parameters('sql.server.secondary.name'))]",
+            "[resourceId('Microsoft.Sql/servers/databases', parameters('sql.server.primary.name'), parameters('sql.database.name'))]"
+          ]
+        },
         {
           "type": "administrators",
           "name": "activeDirectory",
@@ -58,6 +151,101 @@
           },
           "dependsOn": [
             "[resourceId('Microsoft.Sql/servers', parameters('sql.server.primary.name'))]"
+          ]
+        },
+        {
+          "type": "databases",
+          "name": "[parameters('sql.database.name')]",
+          "location": "[parameters('sql.server.primary.location')]",
+          "apiVersion": "2017-10-01-preview",
+          "dependsOn": [
+            "[resourceId('Microsoft.Sql/servers', parameters('sql.server.primary.name'))]"
+          ],
+          "sku": {
+            "name": "[parameters('sql.database.sku.name')]",
+            "tier": "[parameters('sql.database.sku.tier')]",
+            "capacity": "[parameters('sql.database.sku.capacity')]"
+          },
+          "properties": {
+            "edition": "[parameters('sql.database.edition')]",
+            "collation": "[parameters('sql.database.collation')]",
+            "maxSizeBytes": "[parameters('sql.database.maximum.size.in.bytes')]",
+            "zoneRedundant": "[parameters('sql.database.zone.redundancy.enabled')]",
+            "readScale": "[parameters('sql.database.read.scale.out')]"
+          },
+          "resources": [
+            {
+              "name": "current",
+              "type": "transparentDataEncryption",
+              "apiVersion": "2014-04-01",
+              "properties": {
+                "status": "Enabled"
+              },
+              "dependsOn": [
+                "[parameters('sql.database.name')]"
+              ]
+            },
+            {
+              "name": "Default",
+              "type": "backupLongTermRetentionPolicies",
+              "apiVersion": "2017-03-01-preview",
+              "properties": {
+                "weeklyRetention": "P1W",
+                "monthlyRetention": "P4W",
+                "yearlyRetention": "P12M",
+                "weekOfYear": 1
+              },
+              "dependsOn": [
+                "[parameters('sql.database.name')]"
+              ]
+            },
+            {
+              "name": "ForceLastGoodPlan",
+              "type": "advisors",
+              "apiVersion": "2014-04-01",
+              "properties": {
+                "autoExecuteValue": "Enabled"
+              },
+              "scale": null,
+              "dependsOn": [
+                "[parameters('sql.database.name')]"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "AuditingSettings",
+          "type": "auditingSettings",
+          "apiVersion": "2015-05-01-preview",
+          "properties": {
+            "state": "Enabled",
+            "storageEndpoint": "[variables('sql.server.primary.storage.account.endpoint')]",
+            "storageAccountAccessKey": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('sql.server.primary.storage.account.name')), providers('Microsoft.Storage', 'storageAccounts').apiVersion[0]).keys[0].value]",
+            "auditActionsAndGroups": "[variables('sql.server.storage.account.audit.event.types')]",
+            "storageAccountSubscriptionId": "[parameters('sql.server.storage.account.subscription.id')]",
+            "isStorageSecondaryKeyInUse": false,
+            "retentionInDays": "[variables('sql.server.storage.account.audit.retention.in.days')]"
+          },
+          "dependsOn": [
+            "[concat('Microsoft.Sql/servers', parameters('sql.server.primary.name'))]",
+            "[concat('Microsoft.Sql/servers', parameters('sql.server.primary.name'), '/databases/', parameters('sql.database.name'))]"
+          ]
+        },
+        {
+          "name": "SecurityAlerts",
+          "type": "securityAlertPolicies",
+          "apiVersion": "2015-05-01-preview",
+          "properties": {
+            "state": "Enabled",
+            "storageEndpoint": "[variables('sql.server.primary.storage.account.endpoint')]",
+            "storageAccountName": "[parameters('sql.server.primary.storage.account.name')]",
+            "storageAccountAccessKey": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('sql.server.primary.storage.account.name')), providers('Microsoft.Storage', 'storageAccounts').apiVersion[0]).keys[0].value]",
+            "emailAddresses": "[parameters('sql.server.security.email.addresses')]",
+            "retentionInDays": "[variables('sql.server.storage.account.audit.retention.in.days')]"
+          },
+          "dependsOn": [
+            "[concat('Microsoft.Sql/servers', parameters('sql.server.primary.name'))]",
+            "[concat('Microsoft.Sql/servers', parameters('sql.server.primary.name'), '/auditingSettings/AuditingSettings')]"
           ]
         }
       ]
@@ -85,6 +273,41 @@
           },
           "dependsOn": [
             "[resourceId('Microsoft.Sql/servers', parameters('sql.server.secondary.name'))]"
+          ]
+        },
+        {
+          "name": "AuditingSettings",
+          "type": "auditingSettings",
+          "apiVersion": "2015-05-01-preview",
+          "properties": {
+            "state": "Enabled",
+            "storageEndpoint": "[variables('sql.server.secondary.storage.account.endpoint')]",
+            "storageAccountAccessKey": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('sql.server.secondary.storage.account.name')), providers('Microsoft.Storage', 'storageAccounts').apiVersion[0]).keys[0].value]",
+            "auditActionsAndGroups": "[variables('sql.server.storage.account.audit.event.types')]",
+            "storageAccountSubscriptionId": "[parameters('sql.server.storage.account.subscription.id')]",
+            "isStorageSecondaryKeyInUse": false,
+            "retentionInDays": "[variables('sql.server.storage.account.audit.retention.in.days')]"
+          },
+          "dependsOn": [
+            "[concat('Microsoft.Sql/servers', parameters('sql.server.secondary.name'))]",
+            "[concat('Microsoft.Sql/servers', parameters('sql.server.secondary.name'), '/databases/', parameters('sql.database.name'))]"
+          ]
+        },
+        {
+          "name": "SecurityAlerts",
+          "type": "securityAlertPolicies",
+          "apiVersion": "2015-05-01-preview",
+          "properties": {
+            "state": "Enabled",
+            "storageEndpoint": "[variables('sql.server.secondary.storage.account.endpoint')]",
+            "storageAccountName": "[parameters('sql.server.secondary.storage.account.name')]",
+            "storageAccountAccessKey": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('sql.server.secondary.storage.account.name')), providers('Microsoft.Storage', 'storageAccounts').apiVersion[0]).keys[0].value]",
+            "emailAddresses": "[parameters('sql.server.security.email.addresses')]",
+            "retentionInDays": "[variables('sql.server.storage.account.audit.retention.in.days')]"
+          },
+          "dependsOn": [
+            "[concat('Microsoft.Sql/servers', parameters('sql.server.secondary.name'))]",
+            "[concat('Microsoft.Sql/servers', parameters('sql.server.secondary.name'), '/auditingSettings/AuditingSettings')]"
           ]
         }
       ]
