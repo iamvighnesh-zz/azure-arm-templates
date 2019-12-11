@@ -56,6 +56,12 @@
     "sql.database.maximum.size.in.bytes": {
       "type": "string"
     },
+    "sql.database.zone.redundancy.enabled": {
+      "type": "string"
+    },
+    "sql.database.read.scale.out": {
+      "type": "string"
+    },
     "sql.server.primary.storage.account.name": {
       "type": "string"
     },
@@ -163,7 +169,9 @@
           "properties": {
             "edition": "[parameters('sql.database.edition')]",
             "collation": "[parameters('sql.database.collation')]",
-            "maxSizeBytes": "[parameters('sql.database.maximum.size.in.bytes')]"
+            "maxSizeBytes": "[parameters('sql.database.maximum.size.in.bytes')]",
+            "zoneRedundant": "[parameters('sql.database.zone.redundancy.enabled')]",
+            "readScale": "[parameters('sql.database.read.scale.out')]"
           },
           "resources": [
             {

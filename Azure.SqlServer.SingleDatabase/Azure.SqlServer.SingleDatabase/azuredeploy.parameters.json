@@ -64,6 +64,12 @@
     "sql.database.maximum.size.in.bytes": {
       "value": "<INSERT_YOUR_DATABASE_MAX_SIZE_IN_BYTES_HERE>"
     },
+    "sql.database.zone.redundancy.enabled": {
+      "value": "<INSERT_YOUR_DATABASE_ZONE_REDUNDANCY_ENABLED_FLAG_HERE>"
+    },
+    "sql.database.read.scale.out": {
+      "value": "<INSERT_YOUR_DATABASE_READ_SCALE_OUT_FLAG_HERE>"
+    },
     "sql.server.primary.storage.account.name": {
       "value": "<INSERT_YOUR_PRIMARY_STORAGE_ACCOUNT_NAME_HERE>"
     },
