@@ -102,6 +102,34 @@
       },
       "resources": [
         {
+          "name": "[parameters('sql.server.failover.group.name')]",
+          "type": "failoverGroups",
+          "apiVersion": "2015-05-01-preview",
+          "properties": {
+            "serverName": "[parameters('sql.server.primary.name')]",
+            "partnerServers": [
+              {
+                "id": "[resourceId('Microsoft.Sql/servers/', parameters('sql.server.secondary.name'))]"
+              }
+            ],
+            "readWriteEndpoint": {
+              "failoverPolicy": "Automatic",
+              "failoverWithDataLossGracePeriodMinutes": 60
+            },
+            "readOnlyEndpoint": {
+              "failoverPolicy": "Disabled"
+            },
+            "databases": [
+              "[resourceId('Microsoft.Sql/servers/databases', parameters('sql.server.primary.name'), parameters('sql.database.name'))]"
+            ]
+          },
+          "dependsOn": [
+            "[parameters('sql.server.primary.name')]",
+            "[resourceId('Microsoft.Sql/servers', parameters('sql.server.secondary.name'))]",
+            "[resourceId('Microsoft.Sql/servers/databases', parameters('sql.server.primary.name'), parameters('sql.database.name'))]"
+          ]
+        },
+        {
           "type": "administrators",
           "name": "activeDirectory",
           "location": "[parameters('sql.server.primary.location')]",
