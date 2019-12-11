@@ -14,6 +14,9 @@
     "sql.server.secondary.location": {
       "value": "<INSERT_YOUR_SECONDARY_SQL_SERVER_LOCATION_HERE>"
     },
+    "sql.server.failover.group.name": {
+      "value": "<INSERT_YOUR_SQL_SERVER_FAILOVER_GROUP_NAME_HERE>"
+    },
     "sql.server.administrator.user.name": {
       "value": "<INSERT_YOUR_SQL_SERVER_ADMINISTRATOR_USER_NAME_HERE>"
     },

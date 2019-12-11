@@ -14,6 +14,9 @@
     "sql.server.secondary.location": {
       "type": "string"
     },
+    "sql.server.failover.group.name": {
+      "type": "string"
+    },
     "sql.server.administrator.user.name": {
       "type": "string"
     },
