@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30128.74
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{151D2E53-A2C4-4D7D-83FE-D05416EBD58E}") = "Azure.CosmosDb.ThroughputAutoscaling", "Azure.CosmosDb.ThroughputAutoscaling\Azure.CosmosDb.ThroughputAutoscaling.deployproj", "{46209C8C-7211-4989-8191-48411CCF3B18}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{46209C8C-7211-4989-8191-48411CCF3B18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46209C8C-7211-4989-8191-48411CCF3B18}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46209C8C-7211-4989-8191-48411CCF3B18}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46209C8C-7211-4989-8191-48411CCF3B18}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BF089682-5160-4892-8F60-BD1D5E8AEB32}
+	EndGlobalSection
+EndGlobal

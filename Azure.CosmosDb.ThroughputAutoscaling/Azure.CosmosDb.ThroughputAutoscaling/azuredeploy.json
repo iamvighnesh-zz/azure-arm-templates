@@ -1,0 +1,52 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "cosmosdb.account.name": {
+      "type": "string"
+    },
+    "cosmosdb.account.location": {
+      "type": "string"
+    },
+    "cosmosdb.account.offer.type": {
+      "type": "string"
+    },
+    "cosmosdb.account.consistency.level": {
+      "type": "string"
+    },
+    "cosmosdb.account.locations.primary": {
+      "type": "string"
+    },
+    "cosmosdb.account.locations.secondary": {
+      "type": "string"
+    }
+  },
+  "resources": [
+    {
+      "name": "[parameters('cosmosdb.account.name')]",
+      "type": "Microsoft.DocumentDB/databaseAccounts",
+      "location": "[parameters('cosmosdb.account.location')]",
+      "apiVersion": "2019-08-01",
+      "kind": "GlobalDocumentDB",
+      "properties": {
+        "databaseAccountOfferType": "[parameters('cosmosdb.account.offer.type')]",
+        "enableAutomaticFailover": true,
+        "consistencyPolicy": {
+          "defaultConsistencyLevel": "[parameters('cosmosdb.account.consistency.level')]"
+        },
+        "locations": [
+          {
+            "locationName": "[parameters('cosmosdb.account.locations.primary')]",
+            "failoverPriority": "0",
+            "isZoneRedundant": "true"
+          },
+          {
+            "locationName": "[parameters('cosmosdb.account.locations.secondary')]",
+            "failoverPriority": "1",
+            "isZoneRedundant": "true"
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -4,3 +4,5 @@
 
 /Azure.SqlServer.SingleDatabase/.vs/Azure.SqlServer.SingleDatabase
 /.vs
+/Azure.CosmosDb.ThroughputAutoscaling/.vs/Azure.CosmosDb.ThroughputAutoscaling
+/Azure.CosmosDb.ThroughputAutoscaling/Azure.CosmosDb.ThroughputAutoscaling/.vs/Azure.CosmosDb.ThroughputAutoscaling
