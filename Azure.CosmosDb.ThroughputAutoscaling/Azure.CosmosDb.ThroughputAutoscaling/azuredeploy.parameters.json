@@ -3,7 +3,7 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "cosmosdb.account.name": {
-      "value": "cosmosdb-test-vigh-throughput-autoscaling"
+      "value": "cosmosdb-test-throughput-autoscaling"
     },
     "cosmosdb.account.location": {
       "value": "north europe"
@@ -24,9 +24,6 @@
       "value": [
         {
           "ipAddressOrRange": "0.0.0.0"
-        },
-        {
-          "ipAddressOrRange": "43.241.133.108"
         }
       ]
     },
