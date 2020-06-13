@@ -1,0 +1,155 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "cosmosdb.account.name": {
+      "type": "string"
+    },
+    "cosmosdb.account.location": {
+      "type": "string"
+    },
+    "cosmosdb.account.offer.type": {
+      "type": "string"
+    },
+    "cosmosdb.account.consistency.level": {
+      "type": "string"
+    },
+    "cosmosdb.account.locations.primary": {
+      "type": "string"
+    },
+    "cosmosdb.account.locations.secondary": {
+      "type": "string"
+    },
+    "cosmosdb.account.security.whitelisted.ip.addresses": {
+      "type": "array"
+    },
+    "cosmosdb.account.database.name": {
+      "type": "string"
+    },
+    "cosmosdb.account.database.collection.name": {
+      "type": "string"
+    },
+    "cosmosdb.account.database.collection.min.throughput": {
+      "type": "int"
+    },
+    "cosmosdb.account.database.collection.max.throughput": {
+      "type": "int"
+    },
+    "cosmosdb.account.database.collection.document.time.to.live": {
+      "type": "int"
+    }
+  },
+  "resources": [
+    {
+      "apiVersion": "2020-04-01",
+      "name": "[parameters('cosmosdb.account.name')]",
+      "type": "Microsoft.DocumentDB/databaseAccounts",
+      "location": "[parameters('cosmosdb.account.location')]",
+      "kind": "GlobalDocumentDB",
+      "properties": {
+        "databaseAccountOfferType": "[parameters('cosmosdb.account.offer.type')]",
+        "enableAutomaticFailover": false,
+        "consistencyPolicy": {
+          "defaultConsistencyLevel": "[parameters('cosmosdb.account.consistency.level')]"
+        },
+        "locations": [
+          {
+            "locationName": "[parameters('cosmosdb.account.locations.primary')]",
+            "failoverPriority": 0,
+            "isZoneRedundant": false
+          },
+          {
+            "locationName": "[parameters('cosmosdb.account.locations.secondary')]",
+            "failoverPriority": 1,
+            "isZoneRedundant": false
+          }
+        ],
+        "ipRules": "[parameters('cosmosdb.account.security.whitelisted.ip.addresses')]",
+        "resources": []
+      }
+    },
+    {
+      "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases",
+      "name": "[concat(parameters('cosmosdb.account.name'), '/', parameters('cosmosdb.account.database.name'))]",
+      "apiVersion": "2020-04-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('cosmosdb.account.name'))]"
+      ],
+      "properties": {
+        "resource": {
+          "id": "[parameters('cosmosdb.account.database.name')]"
+        }
+      }
+    },
+    {
+      "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers",
+      "name": "[concat(parameters('cosmosdb.account.name'), '/', parameters('cosmosdb.account.database.name'), '/', parameters('cosmosdb.account.database.collection.name'))]",
+      "apiVersion": "2020-04-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.DocumentDB/databaseAccounts/sqlDatabases', parameters('cosmosdb.account.name'), parameters('cosmosdb.account.database.name'))]"
+      ],
+      "properties": {
+        "resource": {
+          "id": "[parameters('cosmosdb.account.database.collection.name')]",
+          "partitionKey": {
+            "paths": [
+              "/myPartitionKey"
+            ],
+            "kind": "Hash"
+          },
+          "indexingPolicy": {
+            "indexingMode": "consistent",
+            "includedPaths": [
+              {
+                "path": "/*"
+              }
+            ],
+            "excludedPaths": [
+              {
+                "path": "/myPathToNotIndex/*"
+              }
+            ],
+            "compositeIndexes": [
+              [
+                {
+                  "path": "/name",
+                  "order": "ascending"
+                },
+                {
+                  "path": "/age",
+                  "order": "descending"
+                }
+              ]
+            ],
+            "spatialIndexes": [
+              {
+                "path": "/path/to/geojson/property/?",
+                "types": [
+                  "Point",
+                  "Polygon",
+                  "MultiPolygon",
+                  "LineString"
+                ]
+              }
+            ]
+          },
+          "defaultTtl": "[parameters('cosmosdb.account.database.collection.document.time.to.live')]",
+          "uniqueKeyPolicy": {
+            "uniqueKeys": [
+              {
+                "paths": [
+                  "/phoneNumber"
+                ]
+              }
+            ]
+          }
+        },
+        "options": {
+          "autoscaleSettings": {
+            "maxThroughput": "[parameters('cosmosdb.account.database.collection.max.throughput')]"
+          }
+        }
+      }
+    }
+  ]
+}
