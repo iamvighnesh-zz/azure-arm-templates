@@ -6,3 +6,5 @@
 /.vs
 /Azure.CosmosDb.ThroughputAutoscaling/.vs/Azure.CosmosDb.ThroughputAutoscaling
 /Azure.CosmosDb.ThroughputAutoscaling/Azure.CosmosDb.ThroughputAutoscaling/.vs/Azure.CosmosDb.ThroughputAutoscaling
+/Azure.CosmosDb.ThroughputAutoscaling/Azure.CosmosDb.ThroughputAutoscaling/obj/Debug
+/Azure.CosmosDb.ThroughputAutoscaling/Azure.CosmosDb.ThroughputAutoscaling/bin/Debug

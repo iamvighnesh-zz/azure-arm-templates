@@ -2,5 +2,48 @@
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
+    "cosmosdb.account.name": {
+      "value": "cosmosdb-test-vigh-throughput-autoscaling"
+    },
+    "cosmosdb.account.location": {
+      "value": "north europe"
+    },
+    "cosmosdb.account.offer.type": {
+      "value": "Standard"
+    },
+    "cosmosdb.account.consistency.level": {
+      "value": "Eventual"
+    },
+    "cosmosdb.account.locations.primary": {
+      "value": "north europe"
+    },
+    "cosmosdb.account.locations.secondary": {
+      "value": "west europe"
+    },
+    "cosmosdb.account.security.whitelisted.ip.addresses": {
+      "value": [
+        {
+          "ipAddressOrRange": "0.0.0.0"
+        },
+        {
+          "ipAddressOrRange": "43.241.133.108"
+        }
+      ]
+    },
+    "cosmosdb.account.database.name": {
+      "value": "test-database"
+    },
+    "cosmosdb.account.database.collection.name": {
+      "value": "test-collection"
+    },
+    "cosmosdb.account.database.collection.min.throughput": {
+      "value": 400
+    },
+    "cosmosdb.account.database.collection.max.throughput": {
+      "value": 4000
+    },
+    "cosmosdb.account.database.collection.document.time.to.live": {
+      "value": 15778463
+    }
   }
 }
